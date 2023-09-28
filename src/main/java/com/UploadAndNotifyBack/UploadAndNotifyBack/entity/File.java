@@ -13,8 +13,8 @@ public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String url;
-    @JsonFormat(pattern="yyyy-MM-dd")
+    private String link;
+    @JsonFormat(pattern="yyyy/MM/dd")
     private Date expiration;
 
 
@@ -26,12 +26,12 @@ public class File {
         this.id = id;
     }
 
-    public String getUrl() {
-        return url;
+    public String getLink() {
+        return link;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public Date getExpiration() {
