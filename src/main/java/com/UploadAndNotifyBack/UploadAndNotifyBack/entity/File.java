@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -15,7 +16,21 @@ public class File {
     private Long id;
     private String link;
     private String expiration;
+    @JsonFormat(pattern="dd-MM-yyyy")
+    private LocalDateTime date;
 
+    public File(String link, String expiration) {
+        this.link = link;
+        this.expiration = expiration;
+    }
+
+    public File(String link, String expiration, LocalDateTime date) {
+        this.link = link;
+        this.expiration = expiration;
+        this.date = date;
+    }
+
+    public File() {}
 
     public Long getId() {
         return id;
@@ -39,5 +54,13 @@ public class File {
 
     public void setExpiration(String expiration) {
         this.expiration = expiration;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }
