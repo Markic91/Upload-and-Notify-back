@@ -14,8 +14,7 @@ public class File {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String link;
-    @JsonFormat(pattern="yyyy/MM/dd")
-    private Date expiration;
+    private String expiration;
 
 
     public Long getId() {
@@ -34,11 +33,11 @@ public class File {
         this.link = link;
     }
 
-    public Date getExpiration() {
+    public String getExpiration() {
         return expiration;
     }
 
-    public void setExpiration(Date expiration) {
+    public void setExpiration(String expiration) {
         this.expiration = expiration;
     }
 }

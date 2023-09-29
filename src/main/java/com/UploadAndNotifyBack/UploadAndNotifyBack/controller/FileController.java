@@ -21,6 +21,11 @@ public class FileController {
 
     @PostMapping("/files")
     public File createFile(@RequestBody File newFile) {
-        return fileRepository.save(newFile);
+        File newFileBis = new File();
+       if(newFile.getExpiration() == "1 jour") {
+           newFileBis.setLink(newFile.getLink());
+           newFileBis.setExpiration("coucou");
+       }
+        return fileRepository.save(newFileBis);
     }
 }
