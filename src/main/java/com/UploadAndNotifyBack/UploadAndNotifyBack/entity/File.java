@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.hibernate.type.descriptor.jdbc.TimestampUtcAsOffsetDateTimeJdbcType;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -17,7 +18,7 @@ public class File {
     private String link;
     private String expiration;
     @JsonFormat(pattern="dd-MM-yyyy")
-    private LocalDateTime date;
+    private LocalDateTime date ;
 
     public File(String link, String expiration) {
         this.link = link;
