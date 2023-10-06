@@ -28,7 +28,7 @@ public class FileController {
         this.fileRepository = fileRepository;
     }
 
-    List<String> files = new ArrayList<String>();
+//    List<String> files = new ArrayList<String>();
     private final Path rootLocation = Paths.get("./Download");
 
     @GetMapping("/files")
@@ -37,12 +37,15 @@ public class FileController {
     }
 
     @PostMapping("/files")
-    public ResponseEntity<String> createFiles( @RequestParam("file") List<MultipartFile> files) throws IOException {
-        for (MultipartFile file : files ) {
-            System.out.println(file.getContentType());
-            System.out.println(file.getOriginalFilename());
-            System.out.println(file.getName());
 
+    public ResponseEntity<String> createFiles(@RequestParam ("file") List<MultipartFile> files ) throws IOException {
+        {
+            for (MultipartFile file : files) {
+                System.out.println(file.getContentType());
+                System.out.println(file.getOriginalFilename());
+                System.out.println(file.getName());
+
+            }
         }
         return (new ResponseEntity<>("Successful", HttpStatus.OK));    }
     }
