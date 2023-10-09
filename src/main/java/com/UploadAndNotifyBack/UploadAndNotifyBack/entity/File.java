@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.hibernate.type.descriptor.jdbc.TimestampUtcAsOffsetDateTimeJdbcType;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -14,10 +15,12 @@ public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
     private String link;
     private String expiration;
     @JsonFormat(pattern="dd-MM-yyyy")
-    private LocalDateTime date;
+    private LocalDateTime date ;
+    private String mail;
 
     public File(String link, String expiration) {
         this.link = link;
@@ -38,6 +41,14 @@ public class File {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLink() {
@@ -62,5 +73,13 @@ public class File {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 }
