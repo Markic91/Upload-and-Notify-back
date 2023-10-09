@@ -41,7 +41,7 @@ public class FileController {
     @PostMapping("/files")
 
     public ResponseEntity<String> createFiles(@RequestParam ("file") List<MultipartFile> files,
-                                              @RequestParam ("url") List<String> urls,
+                                              @RequestParam ("link") List<String> links,
                                               @RequestParam ("exp") String exp,
                                               @RequestParam (required = false,value ="mail") String mail ) {
 
@@ -49,8 +49,8 @@ public class FileController {
         for (int i = 0; i < files.size(); i++) {
             File myNewFile = new File();
             myNewFile.setName(files.get(i).getOriginalFilename());
-            for (String url : urls) {
-                myNewFile.setLink(urls.get(i));
+            for (String link : links) {
+                myNewFile.setLink(links.get(i));
             }
             myNewList.add(myNewFile);
         }
@@ -72,23 +72,14 @@ public class FileController {
 
         myNewList.forEach(item -> item.setMail(mail));
         fileRepository.saveAll(myNewList);
-        return (new ResponseEntity<>("Successful", HttpStatus.OK));    }
+        return (new ResponseEntity<>("Successful", HttpStatus.OK));
     }
-//    public File createFile(@RequestBody File newFile) {
-////        File newFileBis = new File();
-////            newFileBis.setLink(newFile.getLink());
-////            newFileBis.setExpiration(newFile.getExpiration());
-////            if (newFile.getExpiration().equals("1 jour") ) {
-////                newFileBis.setDate(LocalDateTime.now().plusDays(1));
-////            }
-////        if (newFile.getExpiration().equals("1 mois") ) {
-////            newFileBis.setDate(LocalDateTime.now().plusMonths(1));
-////        }
-////        if (newFile.getExpiration().equals("1 an") ) {
-////            newFileBis.setDate(LocalDateTime.now().plusYears(1));
-////        }
-////        if (newFile.getExpiration().equals("jamais") ) {
-////        }
-////        return fileRepository.save(newFileBis);
 
-//}
+
+    @DeleteMapping("files")
+    public boolean deleteFiles() {
+    fileRepository.deleteAll();
+    return true;
+    }
+
+}
