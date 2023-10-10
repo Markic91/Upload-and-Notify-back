@@ -2,23 +2,19 @@ package com.UploadAndNotifyBack.UploadAndNotifyBack.controller;
 
 import com.UploadAndNotifyBack.UploadAndNotifyBack.entity.File;
 import com.UploadAndNotifyBack.UploadAndNotifyBack.repository.FileRepository;
-import org.hibernate.boot.Metadata;
-import org.springframework.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.function.Consumer;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -37,6 +33,10 @@ public class FileController {
     public List<File> getFiles() {
         return fileRepository.findAll();
     }
+
+
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     @PostMapping("/files")
 
@@ -72,6 +72,22 @@ public class FileController {
 
         myNewList.forEach(item -> item.setMail(mail));
         fileRepository.saveAll(myNewList);
+
+
+        // Envoyer un e-mail
+        if (mail != null && !mail.isEmpty()) {
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+           // pour définir l'@ mail du destinataire'
+            mailMessage.setTo(mail);
+
+            mailMessage.setSubject("Notification de partage de fichiers");
+            mailMessage.setText("Coucou, vos fichiers ont été partagés avec succès. Voici les liens de téléchargement :");
+            // Ajout des liens de téléchargement au texte de l'e-mail
+            javaMailSender.send(mailMessage);
+        }
+
+
         return (new ResponseEntity<>("Successful", HttpStatus.OK));
     }
 
@@ -81,5 +97,4 @@ public class FileController {
     fileRepository.deleteAll();
     return true;
     }
-
 }
