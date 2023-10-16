@@ -48,8 +48,8 @@ public class MyFile {
         return link;
     }
 
-    public void setLink(Path link) {
-        this.link = String.valueOf(link);
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public String getExpiration() {
