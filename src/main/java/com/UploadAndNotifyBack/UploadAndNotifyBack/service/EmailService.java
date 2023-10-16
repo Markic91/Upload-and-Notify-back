@@ -1,27 +1,29 @@
 package com.UploadAndNotifyBack.UploadAndNotifyBack.service;
 
-import com.UploadAndNotifyBack.UploadAndNotifyBack.entity.File;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+import com.UploadAndNotifyBack.UploadAndNotifyBack.entity.MyFile;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 public class EmailService {
-
     private static JavaMailSender mailSender;
-    public EmailService(JavaMailSender mailSender){ EmailService.mailSender = mailSender;}
-    public static void sendEmail(String to, String subject, String body) throws MessagingException {
+    public EmailService (JavaMailSender mailSender){ EmailService.mailSender = mailSender;}
+    public static void sendEmail(String to, List<MyFile> body) {
+
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("matheyd@gmx.fr");
         message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
+        message.setSubject("Nouveaux liens envoyés par UploadAndNotify");
+        for (MyFile item : body) {
+            String link = message.getText() != null ?  message.getText() : "";
+            message.setText(item.getLink()+"\n"+ link);
+        }
 
         mailSender.send(message);
     }
 }
+

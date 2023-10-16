@@ -1,39 +1,30 @@
 package com.UploadAndNotifyBack.UploadAndNotifyBack.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import org.hibernate.type.descriptor.jdbc.TimestampUtcAsOffsetDateTimeJdbcType;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
-public class File {
+@Table(name = "Files")
+public class MyFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
     private String link;
     private String expiration;
-    @JsonFormat(pattern="dd-MM-yyyy")
+//    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDateTime date ;
+
     private String mail;
 
-    public File(String link, String expiration) {
-        this.link = link;
-        this.expiration = expiration;
-    }
 
-    public File(String link, String expiration, LocalDateTime date) {
-        this.link = link;
-        this.expiration = expiration;
-        this.date = date;
-    }
 
-    public File() {}
+    public MyFile() {}
+
+    public MyFile(String originalFilename) {
+    }
 
     public Long getId() {
         return id;
@@ -82,4 +73,6 @@ public class File {
     public void setMail(String mail) {
         this.mail = mail;
     }
+
+
 }
