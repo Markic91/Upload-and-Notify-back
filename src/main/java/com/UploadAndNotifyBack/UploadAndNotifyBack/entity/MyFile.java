@@ -2,6 +2,8 @@ package com.UploadAndNotifyBack.UploadAndNotifyBack.entity;
 
 
 import jakarta.persistence.*;
+
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 
 @Entity
@@ -46,8 +48,8 @@ public class MyFile {
         return link;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setLink(Path link) {
+        this.link = String.valueOf(link);
     }
 
     public String getExpiration() {

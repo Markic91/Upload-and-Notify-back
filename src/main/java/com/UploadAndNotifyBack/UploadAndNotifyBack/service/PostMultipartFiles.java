@@ -35,7 +35,8 @@ public class PostMultipartFiles {
             MyFile myNewFile = new MyFile();
             myNewFile.setName(file.getOriginalFilename());
             storageService.store(file);
-            myNewFile.setLink(String.valueOf((fileSystemStorageService.load(file.getOriginalFilename()).toUri().toURL())));
+//            myNewFile.setLink(String.valueOf((fileSystemStorageService.load(file.getOriginalFilename()).toUri().toURL())));
+            myNewFile.setLink(fileSystemStorageService.load(file.getOriginalFilename()));
             myNewList.add(myNewFile);
         }
 
