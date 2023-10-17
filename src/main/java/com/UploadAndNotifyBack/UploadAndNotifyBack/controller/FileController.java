@@ -14,12 +14,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
+@EnableScheduling
 public class FileController {
 
     private static  FileRepository fileRepository;
@@ -74,7 +77,7 @@ public class FileController {
     fileRepository.deleteAll();
     return true;
     }
-
+    @Scheduled(cron = "0 0 02 ? 1-12 MON", zone = "UTC")
     @DeleteMapping("files/expired")
     public static void deleteExpiredFiles() {
         List<MyFile> allFiles = fileRepository.findAll();
@@ -84,7 +87,6 @@ public class FileController {
             }
         }
         fileRepository.flush();
-        System.out.println("C'est qui le boss");
     }
 
 }

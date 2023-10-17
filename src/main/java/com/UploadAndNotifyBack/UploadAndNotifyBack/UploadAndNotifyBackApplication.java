@@ -17,15 +17,6 @@ import java.util.Timer;
 public class UploadAndNotifyBackApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(UploadAndNotifyBackApplication.class, args);
-
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.DAY_OF_WEEK, 2);
-		calendar.set(Calendar.HOUR_OF_DAY, 14);
-		calendar.set(Calendar.MINUTE, 18);
-		calendar.set(Calendar.SECOND, 0);
-		Date time = calendar.getTime();
-		Timer timer = new Timer();
-		timer.schedule(new TimerSet(), time);
 	}
 	@Bean
 	CommandLineRunner init(StorageService storageService) {

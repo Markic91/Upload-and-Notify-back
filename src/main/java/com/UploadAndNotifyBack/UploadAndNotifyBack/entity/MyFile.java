@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 
 @Table(name = "Files")
 public class MyFile {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
