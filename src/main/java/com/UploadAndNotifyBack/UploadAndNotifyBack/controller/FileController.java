@@ -2,6 +2,10 @@ package com.UploadAndNotifyBack.UploadAndNotifyBack.controller;
 
 import com.UploadAndNotifyBack.UploadAndNotifyBack.entity.File;
 import com.UploadAndNotifyBack.UploadAndNotifyBack.repository.FileRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
 import org.hibernate.boot.Metadata;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,7 +28,7 @@ import java.util.function.Consumer;
 @RestController
 public class FileController {
 
-    private final FileRepository fileRepository;
+    private static  FileRepository fileRepository;
 
     public FileController(FileRepository fileRepository) {
         this.fileRepository = fileRepository;
@@ -77,9 +81,21 @@ public class FileController {
 
 
     @DeleteMapping("files")
-    public boolean deleteFiles() {
+    public static boolean deleteFiles() {
     fileRepository.deleteAll();
     return true;
+    }
+
+    @DeleteMapping("files/expired")
+    public static void deleteExpiredFiles() {
+        List<File> allFiles = fileRepository.findAll();
+        for (File file : allFiles) {
+            if (LocalDateTime.now().compareTo(file.getDate()) == 1 && file.getDate() != null) {
+                fileRepository.delete(file);
+            }
+        }
+        fileRepository.flush();
+        System.out.println("C'est qui le boss");
     }
 
 }
