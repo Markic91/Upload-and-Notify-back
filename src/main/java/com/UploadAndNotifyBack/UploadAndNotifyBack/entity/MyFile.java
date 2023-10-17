@@ -1,35 +1,29 @@
 package com.UploadAndNotifyBack.UploadAndNotifyBack.entity;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 
 @Entity
-@Table(indexes = @Index(name = "expiration_index", columnList = "expiration"))
-public class File {
+//@Table(indexes = @Index(name = "expiration_index", columnList = "expiration"))
+
+@Table(name = "Files")
+public class MyFile {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+
     private String link;
     private String expiration;
-    @JsonFormat(pattern="dd-MM-yyyy")
+
     private LocalDateTime date ;
-    private String mail;
 
-    public File(String link, String expiration) {
-        this.link = link;
-        this.expiration = expiration;
+
+    public MyFile() {}
+
+    public MyFile(String originalFilename) {
     }
-
-    public File(String link, String expiration, LocalDateTime date) {
-        this.link = link;
-        this.expiration = expiration;
-        this.date = date;
-    }
-
-    public File() {}
 
     public Long getId() {
         return id;
@@ -71,11 +65,4 @@ public class File {
         this.date = date;
     }
 
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
-    }
 }

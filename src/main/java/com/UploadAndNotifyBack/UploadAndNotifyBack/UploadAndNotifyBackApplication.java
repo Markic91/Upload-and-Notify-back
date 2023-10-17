@@ -1,27 +1,20 @@
 package com.UploadAndNotifyBack.UploadAndNotifyBack;
 
-import com.UploadAndNotifyBack.UploadAndNotifyBack.entity.File;
-import com.UploadAndNotifyBack.UploadAndNotifyBack.repository.FileRepository;
+import com.UploadAndNotifyBack.UploadAndNotifyBack.storage.StorageProperties;
+import com.UploadAndNotifyBack.UploadAndNotifyBack.storage.StorageService;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.sql.*;
-import java.time.*;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Timer;
 
 @SpringBootApplication
+@EnableConfigurationProperties(StorageProperties.class)
+
 public class UploadAndNotifyBackApplication {
-
-//	private static FileRepository fileRepository;
-//
-//	public UploadAndNotifyBackApplication(FileRepository fileRepository) {
-//		this.fileRepository = fileRepository;
-//	}
-
-
 	public static void main(String[] args) {
 		SpringApplication.run(UploadAndNotifyBackApplication.class, args);
 
@@ -33,5 +26,11 @@ public class UploadAndNotifyBackApplication {
 		Date time = calendar.getTime();
 		Timer timer = new Timer();
 		timer.schedule(new TimerSet(), time);
+	}
+	@Bean
+	CommandLineRunner init(StorageService storageService) {
+		return (args) -> {
+			storageService.init();
+		};
 	}
 }
