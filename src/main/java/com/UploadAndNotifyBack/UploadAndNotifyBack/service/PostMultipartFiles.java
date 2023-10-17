@@ -22,7 +22,6 @@ public class PostMultipartFiles {
 
     private final StorageService storageService;
     private final FileRepository fileRepository;
-    private final AtomicInteger counterRequest = new AtomicInteger();
 
 
     private PostMultipartFiles(StorageService storageService, FileRepository fileRepository) {
@@ -55,7 +54,7 @@ public class PostMultipartFiles {
             }
         });
 
-        if ( mail != null && !mail.equals("null")) {
+        if (mail != null && !mail.equals("null")) {
             EmailService.sendEmail(mail, myNewList);
         }
         fileRepository.saveAll(myNewList);

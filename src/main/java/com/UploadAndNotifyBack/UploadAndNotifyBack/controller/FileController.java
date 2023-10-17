@@ -64,7 +64,6 @@ public class FileController {
 
 
     @PostMapping("/files")
-    @ResponseBody
     public List<MyFile> createFiles(@RequestParam("files") List<MultipartFile> files,
                                               @RequestParam ("exp") String exp,
                                               @RequestParam (required = false,value ="mail") String mail ) throws  IOException {
