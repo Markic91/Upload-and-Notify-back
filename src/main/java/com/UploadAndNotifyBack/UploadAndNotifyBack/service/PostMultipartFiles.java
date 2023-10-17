@@ -5,17 +5,15 @@ import com.UploadAndNotifyBack.UploadAndNotifyBack.repository.FileRepository;
 import com.UploadAndNotifyBack.UploadAndNotifyBack.storage.StorageService;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.IOException;
+import java.net.MalformedURLException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class PostMultipartFiles {
@@ -29,10 +27,9 @@ public class PostMultipartFiles {
         this.fileRepository = fileRepository;
     }
 
-    public ArrayList<MyFile> postMultipartFile(List<MultipartFile> files, String exp, String mail ) throws IOException {
+    public ArrayList<MyFile> postMultipartFile(List<MultipartFile> files, String exp, String mail ) throws MalformedURLException {
         ArrayList<MyFile> myNewList = new ArrayList<>();
-        for (
-                MultipartFile file : files) {
+        for ( MultipartFile file : files) {
             MyFile myNewFile = new MyFile();
             myNewFile.setName(file.getOriginalFilename());
             storageService.store(file);
@@ -43,7 +40,6 @@ public class PostMultipartFiles {
             myNewFile.setLink(link);
             myNewList.add(myNewFile);
         }
-
         myNewList.forEach(item -> {
             item.setExpiration(exp);
             switch (exp) {
@@ -54,7 +50,7 @@ public class PostMultipartFiles {
             }
         });
 
-        if (mail != null && !mail.equals("null")) {
+        if (!mail.equals("null")) {
             EmailService.sendEmail(mail, myNewList);
         }
         fileRepository.saveAll(myNewList);
