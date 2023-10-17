@@ -5,6 +5,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.net.MalformedURLException;
 import java.util.List;
 
 
@@ -12,7 +13,7 @@ import java.util.List;
 public class EmailService {
     private static JavaMailSender mailSender;
     public EmailService (JavaMailSender mailSender){ EmailService.mailSender = mailSender;}
-    public static void sendEmail(String to, List<MyFile> body) {
+    public static void sendEmail(String to, List<MyFile> body) throws MalformedURLException {
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("matheyd@gmx.fr");
@@ -22,7 +23,6 @@ public class EmailService {
             String link = message.getText() != null ?  message.getText() : "";
             message.setText(item.getLink()+"\n"+ link);
         }
-
         mailSender.send(message);
     }
 }

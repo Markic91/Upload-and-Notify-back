@@ -2,41 +2,46 @@ package com.UploadAndNotifyBack.UploadAndNotifyBack.service;
 
 import com.UploadAndNotifyBack.UploadAndNotifyBack.entity.MyFile;
 import com.UploadAndNotifyBack.UploadAndNotifyBack.repository.FileRepository;
-import com.UploadAndNotifyBack.UploadAndNotifyBack.storage.FileSystemStorageService;
 import com.UploadAndNotifyBack.UploadAndNotifyBack.storage.StorageService;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class PostMultipartFiles {
 
     private final StorageService storageService;
-    private final FileSystemStorageService fileSystemStorageService;
     private final FileRepository fileRepository;
+    private final AtomicInteger counterRequest = new AtomicInteger();
 
 
-    private PostMultipartFiles(StorageService storageService, FileSystemStorageService fileSystemStorageService, FileRepository fileRepository) {
+    private PostMultipartFiles(StorageService storageService, FileRepository fileRepository) {
         this.storageService = storageService;
-        this.fileSystemStorageService = fileSystemStorageService;
         this.fileRepository = fileRepository;
     }
 
-    public void postMultipartFile(List<MultipartFile> files, String exp, String mail ) throws MalformedURLException {
+    public ArrayList<MyFile> postMultipartFile(List<MultipartFile> files, String exp, String mail ) throws IOException {
         ArrayList<MyFile> myNewList = new ArrayList<>();
         for (
                 MultipartFile file : files) {
             MyFile myNewFile = new MyFile();
             myNewFile.setName(file.getOriginalFilename());
             storageService.store(file);
-//            myNewFile.setLink(String.valueOf((fileSystemStorageService.load(file.getOriginalFilename()).toUri().toURL())));
-            myNewFile.setLink(String.valueOf(fileSystemStorageService.load(file.getOriginalFilename())));
+            var link = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/files/")
+                    .path(Objects.requireNonNull(file.getOriginalFilename()))
+                    .toUriString();
+            myNewFile.setLink(link);
             myNewList.add(myNewFile);
         }
 
@@ -50,10 +55,10 @@ public class PostMultipartFiles {
             }
         });
 
-        myNewList.forEach(item -> item.setMail(mail));
-        if (!mail.equals("null")) {
+        if ( mail != null && !mail.equals("null")) {
             EmailService.sendEmail(mail, myNewList);
         }
         fileRepository.saveAll(myNewList);
+        return myNewList;
     }
 }

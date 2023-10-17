@@ -3,8 +3,8 @@ package com.UploadAndNotifyBack.UploadAndNotifyBack.entity;
 
 import jakarta.persistence.*;
 
-import java.nio.file.Path;
 import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "Files")
@@ -19,7 +19,6 @@ public class MyFile {
 //    @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDateTime date ;
 
-    private String mail;
 
 
 
@@ -66,14 +65,6 @@ public class MyFile {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
-    }
-
-    public String getMail() {
-        return mail;
-    }
-
-    public void setMail(String mail) {
-        this.mail = mail;
     }
 
 
