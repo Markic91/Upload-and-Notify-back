@@ -9,20 +9,18 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-@Service
-public class FileSystemStorageService implements StorageService {
+@Service()
+public class FileSystemStorageService {
 
     private final Path rootLocation;
 
-    @Autowired
-    public FileSystemStorageService(StorageProperties properties) {
+    public FileSystemStorageService(StorageProperties properties) throws StorageException {
 
         if (properties.getLocation().trim().length() == 0) {
             throw new StorageException("File upload location can not be Empty.");
@@ -31,8 +29,7 @@ public class FileSystemStorageService implements StorageService {
         this.rootLocation = Paths.get(properties.getLocation());
     }
 
-    @Override
-    public void store(MultipartFile file) {
+    public void store(MultipartFile file) throws StorageException {
         try {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file.");
@@ -54,13 +51,11 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
-    @Override
     public Path load(String filename) {
         return rootLocation.resolve(filename).normalize();
     }
 
-    @Override
-    public Resource loadAsResource(String filename) {
+    public Resource loadAsResource(String filename) throws StorageException {
         try {
             Path file = load(filename);
             Resource resource = new UrlResource(file.toUri());
@@ -76,13 +71,11 @@ public class FileSystemStorageService implements StorageService {
         }
     }
 
-    @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(rootLocation.toFile());
     }
 
-    @Override
-    public void init() {
+    public void init() throws StorageException {
         try {
             Files.createDirectories(rootLocation);
         } catch (IOException e) {

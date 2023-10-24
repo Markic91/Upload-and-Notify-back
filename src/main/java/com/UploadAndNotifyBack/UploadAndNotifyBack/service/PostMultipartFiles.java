@@ -2,7 +2,8 @@ package com.UploadAndNotifyBack.UploadAndNotifyBack.service;
 
 import com.UploadAndNotifyBack.UploadAndNotifyBack.entity.MyFile;
 import com.UploadAndNotifyBack.UploadAndNotifyBack.repository.FileRepository;
-import com.UploadAndNotifyBack.UploadAndNotifyBack.storage.StorageService;
+import com.UploadAndNotifyBack.UploadAndNotifyBack.storage.FileSystemStorageService;
+import com.UploadAndNotifyBack.UploadAndNotifyBack.storage.StorageException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,21 +19,22 @@ import java.util.Objects;
 @Service
 public class PostMultipartFiles {
 
-    private final StorageService storageService;
+    private final FileSystemStorageService storageService;
     private final FileRepository fileRepository;
+    private final EmailService emailService;
 
-
-    private PostMultipartFiles(StorageService storageService, FileRepository fileRepository) {
+    private PostMultipartFiles(FileSystemStorageService storageService, FileRepository fileRepository, EmailService emailService) {
         this.storageService = storageService;
         this.fileRepository = fileRepository;
+        this.emailService = emailService;
     }
 
-    public ArrayList<MyFile> postMultipartFile(List<MultipartFile> files, String exp, String mail ) throws MalformedURLException {
+    public ArrayList<MyFile> postMultipartFile(List<MultipartFile> files, String exp, String mail ) throws MalformedURLException, StorageException {
         ArrayList<MyFile> myNewList = new ArrayList<>();
         for ( MultipartFile file : files) {
             MyFile myNewFile = new MyFile();
             myNewFile.setName(file.getOriginalFilename());
-            storageService.store(file);
+            this.storageService.store(file);
             var link = ServletUriComponentsBuilder.fromCurrentContextPath()
                     .path("/files/")
                     .path(Objects.requireNonNull(file.getOriginalFilename()))
@@ -51,7 +53,7 @@ public class PostMultipartFiles {
         });
 
         if (!mail.equals("null")) {
-            EmailService.sendEmail(mail, myNewList);
+            this.emailService.sendEmail(mail, myNewList);
         }
         fileRepository.saveAll(myNewList);
         return myNewList;
